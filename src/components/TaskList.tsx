@@ -31,7 +31,7 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
 
   handleDelete(event: React.SyntheticEvent<HTMLButtonElement>) {
     let currentItems = this.state.items.slice();
-    currentItems.splice(Number(event.currentTarget.value), 1);
+    currentItems.splice(parseInt(event.currentTarget.value), 1);
     this.setState({items: currentItems});
   }
 
