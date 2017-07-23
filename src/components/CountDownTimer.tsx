@@ -9,12 +9,13 @@ enum TimerMode {
 export interface CountDownTimerProps {
   longInterval: number;
   shortInterval: number;
-  breakInterval: number
+  breakInterval: number;
 }
 
 export interface CountDownTimerState {
   secondsRemaining: number;
   timerMode: TimerMode;
+  paused: boolean;
 }
 
 export class CountDownTimer extends React.Component<CountDownTimerProps, CountDownTimerState> {
@@ -23,7 +24,7 @@ export class CountDownTimer extends React.Component<CountDownTimerProps, CountDo
 
   constructor(props: CountDownTimerProps) {
     super(props);
-    this.state = {secondsRemaining: this.props.longInterval, timerMode: TimerMode.long};
+    this.state = {secondsRemaining: this.props.longInterval, timerMode: TimerMode.long, paused: true};
   }
 
   private formatTime(secondsRemaining: number): string {
@@ -34,7 +35,9 @@ export class CountDownTimer extends React.Component<CountDownTimerProps, CountDo
   }
 
   private tick() {
-    this.setState({secondsRemaining: this.state.secondsRemaining - 1});
+    if(!this.state.paused) {
+      this.setState({secondsRemaining: this.state.secondsRemaining - 1});
+    }
 
     if(this.state.secondsRemaining < 0) { 
       switch(this.state.timerMode) {
@@ -65,6 +68,7 @@ export class CountDownTimer extends React.Component<CountDownTimerProps, CountDo
       <div>
         <p>I'm a timer!</p>
         <h2>{this.formatTime(this.state.secondsRemaining)}</h2>
+        <button onClick={() => this.setState({paused: !this.state.paused})}>{this.state.paused ? "Start" : "Pause"}</button>
       </div>
     );
   }
