@@ -48,7 +48,7 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
   render() {
     return(
       <div>
-        <p>I'm a list of tasks!</p>
+        <h2>Things to do:</h2>
         <ul>
           { this.state.items.map((item: string, i: number) => <li key={i}>{item} {i == this.state.currentItem ? '(Do this!)' : ''} <button value={i} onClick={this.handleDelete}>Delete</button></li>) }
         </ul>
