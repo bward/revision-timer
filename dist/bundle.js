@@ -178,7 +178,7 @@ class TaskList extends React.Component {
     }
     render() {
         return (React.createElement("div", null,
-            React.createElement("p", null, "I'm a list of tasks!"),
+            React.createElement("h2", null, "Things to do:"),
             React.createElement("ul", null, this.state.items.map((item, i) => React.createElement("li", { key: i },
                 item,
                 " ",
