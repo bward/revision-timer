@@ -1,6 +1,7 @@
 import * as React from "react";
 
 export interface TaskListProps {
+  break: boolean;
 }
 
 export interface TaskListState {
@@ -33,6 +34,10 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
     let currentItems = this.state.items.slice();
     currentItems.splice(parseInt(event.currentTarget.value), 1);
     this.setState({items: currentItems});
+  }
+
+  componentWillReceiveProps() {
+    
   }
 
   render() {
