@@ -4,6 +4,6 @@ import * as ReactDOM from "react-dom";
 import { RevisionTimer } from "./components/RevisionTimer";
 
 ReactDOM.render(
-    <RevisionTimer />,
-    document.getElementById("root")
+  <RevisionTimer />,
+  document.getElementById("root")
 );
