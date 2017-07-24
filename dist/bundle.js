@@ -127,11 +127,11 @@ class RevisionTimer extends React.Component {
         clearInterval(this.intervalId);
     }
     render() {
-        return (React.createElement("div", null,
-            React.createElement("h1", null, "Morwenna's Revision Nerve Centre"),
-            React.createElement("p", null, "I'm a timer!"),
-            React.createElement("h2", null, this.formatTime(this.state.secondsRemaining)),
-            React.createElement("button", { onClick: () => this.setState({ paused: !this.state.paused }) }, this.state.paused ? "Start" : "Pause"),
+        return (React.createElement("div", { className: "container" },
+            React.createElement("div", { className: "row justify-content-center mb-2" },
+                React.createElement("div", { className: "col-4 text-center" },
+                    React.createElement("h2", null, this.formatTime(this.state.secondsRemaining)),
+                    React.createElement("button", { type: "button", className: this.state.paused ? "btn btn-success" : "btn btn-secondary", onClick: () => this.setState({ paused: !this.state.paused }) }, this.state.paused ? "Start" : "Pause"))),
             React.createElement(TaskList_1.TaskList, { break: this.state.break })));
     }
 }
@@ -177,17 +177,19 @@ class TaskList extends React.Component {
         }
     }
     render() {
+        let divClass = "list-group-item clearfix";
         return (React.createElement("div", null,
-            React.createElement("h2", null, "Things to do:"),
-            React.createElement("ul", null, this.state.items.map((item, i) => React.createElement("li", { key: i },
-                item,
-                " ",
-                i == this.state.currentItem ? '(Do this!)' : '',
-                " ",
-                React.createElement("button", { value: i, onClick: this.handleDelete }, "Delete")))),
-            React.createElement("form", { onSubmit: this.handleSubmit },
-                React.createElement("input", { type: "text", value: this.state.newItem, onChange: this.handleChange }),
-                React.createElement("input", { type: "submit", value: "Add" }))));
+            React.createElement("div", { className: "row mb-2" },
+                React.createElement("div", { className: "col" },
+                    React.createElement("ul", { className: "list-group" }, this.state.items.map((item, i) => React.createElement("div", { key: i, className: i == this.state.currentItem ? divClass + " active" : divClass },
+                        React.createElement("div", { className: "col" }, item),
+                        React.createElement("div", { className: "col" },
+                            React.createElement("button", { type: "button", className: "close", value: i, onClick: this.handleDelete }, "\u00D7"))))))),
+            React.createElement("div", { className: "row align-items-center" },
+                React.createElement("div", { className: "col" },
+                    React.createElement("form", { className: "form-inline", onSubmit: this.handleSubmit },
+                        React.createElement("input", { type: "text", className: "form-control mb-2 mr-sm-2 mb-sm-0", placeholder: "New Item", value: this.state.newItem, onChange: this.handleChange }),
+                        React.createElement("button", { type: "submit", className: "btn btn-primary" }, "Add"))))));
     }
 }
 exports.TaskList = TaskList;
