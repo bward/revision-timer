@@ -60,7 +60,7 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
     return(
       <div className="container">
         <div className="row justify-content-center mb-2">
-          <div className="col-4 text-center">
+          <div className="col text-center">
             <h1 className="display-2">{this.formatTime(this.state.secondsRemaining)}</h1>
             <button type="button"
                 className={this.state.paused ? "btn btn-success" : "btn btn-secondary"}
