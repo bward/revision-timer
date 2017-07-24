@@ -61,7 +61,7 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
       <div className="container">
         <div className="row justify-content-center mb-2">
           <div className="col-4 text-center">
-            <h2>{this.formatTime(this.state.secondsRemaining)}</h2>
+            <h1 className="display-2">{this.formatTime(this.state.secondsRemaining)}</h1>
             <button type="button"
                 className={this.state.paused ? "btn btn-success" : "btn btn-secondary"}
                 onClick={() => this.setState({paused: !this.state.paused})}>{this.state.paused ? "Start" : "Pause"}</button>
