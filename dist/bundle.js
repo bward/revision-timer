@@ -520,7 +520,7 @@ class RevisionTimer extends React.Component {
     render() {
         return (React.createElement("div", { className: "container" },
             React.createElement("div", { className: "row justify-content-center mb-2" },
-                React.createElement("div", { className: "col-4 text-center" },
+                React.createElement("div", { className: "col text-center" },
                     React.createElement("h1", { className: "display-2" }, this.formatTime(this.state.secondsRemaining)),
                     React.createElement("button", { type: "button", className: this.state.paused ? "btn btn-success" : "btn btn-secondary", onClick: () => this.setState({ paused: !this.state.paused }) }, this.state.paused ? "Start" : "Pause"))),
             React.createElement(TaskList_1.TaskList, { break: this.state.break }),
