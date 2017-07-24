@@ -1,6 +1,10 @@
 import * as React from "react";
 import { TaskList } from "./TaskList";
 
+declare var require:(moduleId:string) => any;
+var ReactHowler = require("react-howler");
+
+
 export interface RevisionTimerProps {
   workSeconds: number;
   breakSeconds: number;
@@ -10,6 +14,7 @@ export interface RevisionTimerState {
   secondsRemaining: number;
   break: boolean;
   paused: boolean;
+  shouldPlaySound: boolean;
 }
 
 export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionTimerState> {
@@ -18,7 +23,7 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
 
   constructor(props: RevisionTimerProps) {
     super(props);
-    this.state = {secondsRemaining: this.props.workSeconds, break: false, paused: true};
+    this.state = {secondsRemaining: this.props.workSeconds, break: false, paused: true, shouldPlaySound: false};
   }
 
   private formatTime(secondsRemaining: number): string {
@@ -35,9 +40,9 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
 
     if(this.state.secondsRemaining < 0) { 
       if(this.state.break) {
-        this.setState({secondsRemaining: this.props.workSeconds, break: false});
+        this.setState({secondsRemaining: this.props.workSeconds, break: false, shouldPlaySound: true});
       } else {
-        this.setState({secondsRemaining: this.props.breakSeconds, break: true});
+        this.setState({secondsRemaining: this.props.breakSeconds, break: true, shouldPlaySound: true});
        }
       
     }
@@ -64,6 +69,9 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
         </div>
 
         <TaskList break={this.state.break}/>
+        {this.state.shouldPlaySound ?
+        <ReactHowler src='./zen_temple_bell.mp3' onEnd={() => this.setState({shouldPlaySound: false})}/>
+        : null}
       </div>
     );
   }
