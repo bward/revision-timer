@@ -18,6 +18,7 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.renderTask = this.renderTask.bind(this);
   }
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -45,22 +46,28 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
     }
   }
 
-  render() {
+  renderTask(item: string, key: number) {
     let divClass = "list-group-item clearfix";
+    return(
+      <div key={key} className={key == this.state.currentItem ? divClass + " active" : divClass}>
+        <div className="col">
+          {item}
+        </div>
+        <div className="col">
+          <button type="button" className="close" value={key} onClick={this.handleDelete}>&times;</button>
+        </div>
+      </div>
+    )
+  }
+
+
+  render() {
     return(
       <div>
         <div className="row mb-2">
           <div className="col">
             <ul className="list-group">
-              { this.state.items.map((item: string, i: number) =>
-                <div key={i} className={i == this.state.currentItem ? divClass + " active" : divClass}>
-                  <div className="col">
-                    {item}
-                  </div>
-                  <div className="col">
-                    <button type="button" className="close" value={i} onClick={this.handleDelete}>&times;</button>
-                  </div>
-                </div>) }
+              { this.state.items.map(this.renderTask) }
             </ul>
           </div>
         </div>
