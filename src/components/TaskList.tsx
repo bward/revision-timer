@@ -46,16 +46,32 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
   }
 
   render() {
+    let divClass = "list-group-item clearfix";
     return(
       <div>
-        <p>I'm a list of tasks!</p>
-        <ul>
-          { this.state.items.map((item: string, i: number) => <li key={i}>{item} {i == this.state.currentItem ? '(Do this!)' : ''} <button value={i} onClick={this.handleDelete}>Delete</button></li>) }
-        </ul>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" value={this.state.newItem} onChange={this.handleChange} />
-          <input type="submit" value="Add" />
-        </form>
+        <div className="row mb-2">
+          <div className="col">
+            <ul className="list-group">
+              { this.state.items.map((item: string, i: number) =>
+                <div key={i} className={i == this.state.currentItem ? divClass + " active" : divClass}>
+                  <div className="col">
+                    {item}
+                  </div>
+                  <div className="col">
+                    <button type="button" className="close" value={i} onClick={this.handleDelete}>&times;</button>
+                  </div>
+                </div>) }
+            </ul>
+          </div>
+        </div>
+        <div className="row align-items-center">
+          <div className="col">
+            <form className="form-inline" onSubmit={this.handleSubmit}>
+              <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="New Item" value={this.state.newItem} onChange={this.handleChange} />
+              <button type="submit" className="btn btn-primary">Add</button>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }
