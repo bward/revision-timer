@@ -5,7 +5,7 @@ export interface TaskListProps {
 }
 
 export interface TaskListState {
-  items: string[];
+  tasks: string[];
   newItem: string;
   currentItem: number | null;
 }
@@ -14,17 +14,30 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
 
   constructor(props: TaskListProps) {
     super(props);
-    this.state = {items: ['Do laundry', 'Empty bins'], newItem: '', currentItem: null};
+    this.state = {tasks: this.getInitialTasks(), newItem: '', currentItem: null};
+    
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.renderTask = this.renderTask.bind(this);
   }
 
+  getInitialTasks(): string[] {
+    let taskString = localStorage.getItem('tasks');
+    let tasks: string[];
+    if(taskString == undefined) {
+      tasks = ['Do laundry', 'Empty bins'];
+    } else {
+      tasks = JSON.parse(taskString);
+    }
+    return tasks;
+  }
+
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    let currentItems = this.state.items.slice();
-    currentItems.push(this.state.newItem);
-    this.setState({items: currentItems, newItem: ''});
+    let newTasks = this.state.tasks.slice();
+    newTasks.push(this.state.newItem);
+    this.setState({tasks: newTasks, newItem: ''});
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
     event.preventDefault();
   }
 
@@ -33,16 +46,17 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
   }
 
   handleDelete(event: React.SyntheticEvent<HTMLButtonElement>) {
-    let currentItems = this.state.items.slice();
-    currentItems.splice(parseInt(event.currentTarget.value), 1);
-    this.setState({items: currentItems});
+    let newTasks = this.state.tasks.slice();
+    newTasks.splice(parseInt(event.currentTarget.value), 1);
+    this.setState({tasks: newTasks});
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
   }
 
   componentWillReceiveProps(nextProps: TaskListProps) {
     if (this.props.break && !nextProps.break) {
       this.setState({currentItem: null});
     } else if (!this.props.break && nextProps.break) {
-      this.setState({currentItem: Math.floor((Math.random() * this.state.items.length))});
+      this.setState({currentItem: Math.floor((Math.random() * this.state.tasks.length))});
     }
   }
 
@@ -67,7 +81,7 @@ export class TaskList extends React.Component<TaskListProps, TaskListState> {
         <div className="row mb-2">
           <div className="col">
             <ul className="list-group">
-              { this.state.items.map(this.renderTask) }
+              { this.state.tasks.map(this.renderTask) }
             </ul>
           </div>
         </div>

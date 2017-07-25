@@ -6,11 +6,11 @@ var ReactHowler = require("react-howler");
 
 
 export interface RevisionTimerProps {
-  workSeconds: number;
-  breakSeconds: number;
 }
 
 export interface RevisionTimerState {
+  workSeconds: number;
+  breakSeconds: number;
   secondsRemaining: number;
   break: boolean;
   paused: boolean;
@@ -23,9 +23,14 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
 
   constructor(props: RevisionTimerProps) {
     super(props);
-    this.state = {secondsRemaining: this.props.workSeconds, break: false, paused: true, shouldPlaySound: false};
+    this.state = {workSeconds: 1500,
+                  breakSeconds: 300,
+                  secondsRemaining: 1500,
+                  break: false,
+                  paused: true,
+                  shouldPlaySound: false};
   }
-
+  
   private formatTime(secondsRemaining: number): string {
     let minutes = Math.floor(secondsRemaining / 60);
     let seconds = secondsRemaining % 60;
@@ -40,9 +45,9 @@ export class RevisionTimer extends React.Component<RevisionTimerProps, RevisionT
 
     if(this.state.secondsRemaining < 0) { 
       if(this.state.break) {
-        this.setState({secondsRemaining: this.props.workSeconds, break: false, shouldPlaySound: true});
+        this.setState({secondsRemaining: this.state.workSeconds, break: false, shouldPlaySound: true});
       } else {
-        this.setState({secondsRemaining: this.props.breakSeconds, break: true, shouldPlaySound: true});
+        this.setState({secondsRemaining: this.state.breakSeconds, break: true, shouldPlaySound: true});
        }
       
     }
