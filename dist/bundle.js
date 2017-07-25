@@ -469,7 +469,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(1);
 const ReactDOM = __webpack_require__(7);
 const RevisionTimer_1 = __webpack_require__(8);
-ReactDOM.render(React.createElement(RevisionTimer_1.RevisionTimer, { workSeconds: 1500, breakSeconds: 300 }), document.getElementById("root"));
+ReactDOM.render(React.createElement(RevisionTimer_1.RevisionTimer, null), document.getElementById("root"));
 
 
 /***/ }),
@@ -491,7 +491,12 @@ var ReactHowler = __webpack_require__(10);
 class RevisionTimer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { secondsRemaining: this.props.workSeconds, break: false, paused: true, shouldPlaySound: false };
+        this.state = { workSeconds: 1500,
+            breakSeconds: 300,
+            secondsRemaining: 1500,
+            break: false,
+            paused: true,
+            shouldPlaySound: false };
     }
     formatTime(secondsRemaining) {
         let minutes = Math.floor(secondsRemaining / 60);
@@ -504,10 +509,10 @@ class RevisionTimer extends React.Component {
         }
         if (this.state.secondsRemaining < 0) {
             if (this.state.break) {
-                this.setState({ secondsRemaining: this.props.workSeconds, break: false, shouldPlaySound: true });
+                this.setState({ secondsRemaining: this.state.workSeconds, break: false, shouldPlaySound: true });
             }
             else {
-                this.setState({ secondsRemaining: this.props.breakSeconds, break: true, shouldPlaySound: true });
+                this.setState({ secondsRemaining: this.state.breakSeconds, break: true, shouldPlaySound: true });
             }
         }
     }
@@ -543,32 +548,45 @@ const React = __webpack_require__(1);
 class TaskList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { items: ['Do laundry', 'Empty bins'], newItem: '', currentItem: null };
+        this.state = { tasks: this.getInitialTasks(), newItem: '', currentItem: null };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.renderTask = this.renderTask.bind(this);
     }
+    getInitialTasks() {
+        let taskString = localStorage.getItem('tasks');
+        let tasks;
+        if (taskString == undefined) {
+            tasks = ['Do laundry', 'Empty bins'];
+        }
+        else {
+            tasks = JSON.parse(taskString);
+        }
+        return tasks;
+    }
     handleSubmit(event) {
-        let currentItems = this.state.items.slice();
-        currentItems.push(this.state.newItem);
-        this.setState({ items: currentItems, newItem: '' });
+        let newTasks = this.state.tasks.slice();
+        newTasks.push(this.state.newItem);
+        this.setState({ tasks: newTasks, newItem: '' });
+        localStorage.setItem('tasks', JSON.stringify(newTasks));
         event.preventDefault();
     }
     handleChange(event) {
         this.setState({ newItem: event.currentTarget.value });
     }
     handleDelete(event) {
-        let currentItems = this.state.items.slice();
-        currentItems.splice(parseInt(event.currentTarget.value), 1);
-        this.setState({ items: currentItems });
+        let newTasks = this.state.tasks.slice();
+        newTasks.splice(parseInt(event.currentTarget.value), 1);
+        this.setState({ tasks: newTasks });
+        localStorage.setItem('tasks', JSON.stringify(newTasks));
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.break && !nextProps.break) {
             this.setState({ currentItem: null });
         }
         else if (!this.props.break && nextProps.break) {
-            this.setState({ currentItem: Math.floor((Math.random() * this.state.items.length)) });
+            this.setState({ currentItem: Math.floor((Math.random() * this.state.tasks.length)) });
         }
     }
     renderTask(item, key) {
@@ -582,7 +600,7 @@ class TaskList extends React.Component {
         return (React.createElement("div", null,
             React.createElement("div", { className: "row mb-2" },
                 React.createElement("div", { className: "col" },
-                    React.createElement("ul", { className: "list-group" }, this.state.items.map(this.renderTask)))),
+                    React.createElement("ul", { className: "list-group" }, this.state.tasks.map(this.renderTask)))),
             React.createElement("div", { className: "row align-items-center" },
                 React.createElement("div", { className: "col" },
                     React.createElement("form", { className: "form-inline", onSubmit: this.handleSubmit },
